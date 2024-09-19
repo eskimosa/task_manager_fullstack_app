@@ -4,12 +4,35 @@ import { useNavigate } from 'react-router-dom';
 const AddTask = ({ addTaskSubmit }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [tag, setTag] = useState('');
-  const [tagColor, setTagColor] = useState('');
-  const [completed, setCompleted] = useState('');
-  const [createdAt, setCreatedAt] = useState('');
+  const [tags, setTags] = useState([{ name: '', color: '' }]);
+  const [completed, setCompleted] = useState('No');
 
   const navigate = useNavigate();
+
+  const colorOptions = [
+    { name: 'Red', value: '#FF0000' },
+    { name: 'Green', value: '#00FF00' },
+    { name: 'Blue', value: '#0000FF' },
+    { name: 'Yellow', value: '#FFFF00' },
+    { name: 'Orange', value: '#FFA500' },
+    { name: 'White', value: '#FFFFFF' },
+  ];
+
+  const addTagField = () => {
+    setTags([...tags, { name: '', color: '' }]);
+  };
+
+  const removeTagField = (index) => {
+    if (tags.length > 1) {
+      const newTags = tags.filter((_, i) => i !== index);
+      setTags(newTags);
+    }
+  };
+  const handleTagChange = (index, field, value) => {
+    const newTags = [...tags];
+    newTags[index][field] = value;
+    setTags(newTags);
+  };
 
   const submitForm = async (e) => {
     e.preventDefault();
@@ -17,12 +40,11 @@ const AddTask = ({ addTaskSubmit }) => {
     const newTask = {
       title,
       description,
-      tag,
-      tagColor,
+      tag: tags,
       completed,
-      createdAt
     };
 
+    console.log('Data being sent to the backend:', newTask);
     await addTaskSubmit(newTask);
 
     return navigate('/');
@@ -68,62 +90,51 @@ const AddTask = ({ addTaskSubmit }) => {
                 onChange={(e) => setDescription(e.target.value)}
               />
             </div>
-            <div className='mb-4'>
-              <label
-                htmlFor='tag'
-                className='block text-gray-700 font-bold mb-2'>
-                Tag
-              </label>
-              <input
-                type='text'
-                id='tag'
-                name='tag'
-                className='border rounded w-full py-2 px-3 mb-2'
-                placeholder='eg. Urgent'
-                required
-                value={tag}
-                onChange={(e) => setTag(e.target.value)}
-              />
-            </div>
-            <div className='mb-4'>
-              <label
-                htmlFor='tagColor'
-                className='block text-gray-700 font-bold mb-2'>
-                Tag Color
-              </label>
-              <select
-                id='tagColor'
-                name='tagColor'
-                className='border rounded w-full py-2 px-3 mb-2'
-                required
-                value={tagColor}
-                onChange={(e) => setTagColor(e.target.value)}
-              >
-                <option value='Red'>Red</option>
-                <option value='Yellow'>Yellow</option>
-                <option value='Blue'>Blue</option>
-                <option value='Green'>Green</option>
-                <option value='Orange'>Orange</option>
-                <option value='White'>White</option>
-              </select>
-            </div>
-            <div className='mb-4'>
-              <label
-                htmlFor='createdAt'
-                className='block text-gray-700 font-bold mb-2'>
-                Created at
-              </label>
-              <input
-                type='text'
-                id='createdAt'
-                name='createdAt'
-                className='border rounded w-full py-2 px-3 mb-2'
-                placeholder='eg. 25/10/2024'
-                required
-                value={createdAt}
-                onChange={(e) => setCreatedAt(e.target.value)}
-              />
-            </div>
+            <label
+              htmlFor='tag'
+              className='block text-gray-700 font-bold mb-2'>
+              Tag
+            </label>
+            {/* Tag Fields */}
+            {tags.map((tag, index) => (
+              <div key={index} className='flex items-center mb-4 w-full'>
+                <input
+                  type='text'
+                  className='border rounded-l py-2 px-3 w-1/4'
+                  placeholder='Tag name'
+                  value={tag.name}
+                  onChange={(e) => handleTagChange(index, 'name', e.target.value)}
+                />
+                <select
+                  className='border rounded-l py-2 px-3 mx-2 w-1/4'
+                  value={tag.color}
+                  onChange={(e) => handleTagChange(index, 'color', e.target.value)}
+                >
+                  <option value=''>Select a color</option>
+                  {colorOptions.map((color) => (
+                    <option
+                      key={color.value}
+                      value={color.value}
+                      style={{ backgroundColor: color.value }}
+                    >
+                      {color.name}
+                    </option>
+                  ))}
+                </select>
+                <span
+                  className='text-blue-600 text-lg font-bold cursor-pointer mx-2'
+                  onClick={addTagField}
+                >
+                  +
+                </span>
+                <span
+                  className='text-red-600 text-lg font-bold cursor-pointer mx-2'
+                  onClick={() => removeTagField(index)}
+                >
+                  -
+                </span>
+              </div>
+            ))}
             <div className='mb-4'>
               <label
                 htmlFor='completed'

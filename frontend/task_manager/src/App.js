@@ -8,14 +8,11 @@ import axios from "axios";
 const App = () => {
 
   const addTask = async (newTask) => {
-    const postData = async () => {
         try {
-          const add_task = await axios.post('http://localhost:8000/add_task/', newTask);
+          await axios.post('http://localhost:8000/add_task/', newTask);
         } catch (error) {
-          console.log('Error occured:', error)
+          console.log('Error occured:', error);
         }
-        return;
-      };
     };
 
   return (
