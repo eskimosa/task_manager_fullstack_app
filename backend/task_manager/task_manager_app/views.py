@@ -40,9 +40,3 @@ class TagAutoFillView(viewsets.ViewSet):
         tags = Tag.objects.filter(name__icontains=query)
         serializer = TagSerializer(tags, many=True)
         return Response(serializer.data)
-
-class TagsViewSet(viewsets.ViewSet):
-    def list(self, request):
-        queryset = Tag.objects.all()
-        serializer = TagSerializer(queryset, many=True)
-        return Response(serializer.data)
