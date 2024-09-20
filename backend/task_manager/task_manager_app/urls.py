@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .views import TaskViewSet, TagAutoFillView, TagsViewSet
+from .views import TaskViewSet, TagAutoFillView
 
 urlpatterns = [
     path('list_tasks/', TaskViewSet.as_view({'get': 'list'}), name='tasks'),

@@ -5,7 +5,7 @@ const AddTask = ({ addTaskSubmit }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [tags, setTags] = useState([{ name: '', color: '' }]);
-  const [completed, setCompleted] = useState('No');
+  const [completed, setCompleted] = useState(false);
 
   const navigate = useNavigate();
 
@@ -41,7 +41,7 @@ const AddTask = ({ addTaskSubmit }) => {
       title,
       description,
       tag: tags,
-      completed,
+      completed: completed ? true : false,
     };
 
     console.log('Data being sent to the backend:', newTask);
@@ -146,8 +146,8 @@ const AddTask = ({ addTaskSubmit }) => {
                 name='completed'
                 className='border rounded w-full py-2 px-3 mb-2'
                 required
-                value={completed}
-                onChange={(e) => setCompleted(e.target.value)}
+                value={completed ? 'Yes' : 'No'}
+                onChange={(e) => setCompleted(e.target.value === 'Yes')}
               >
                 <option value='Yes'>Yes</option>
                 <option value='No'>No</option>
