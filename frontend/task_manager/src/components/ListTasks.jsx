@@ -30,12 +30,12 @@ const ListTasks = () => {
 
 
     return (
-        <section className="bg-blue-50 px-4 py-10">
+        <section className="bg-red-50 px-4 py-10">
             <div className="container m-auto">
                 <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
                     {tasks.length > 0 ? (
                         tasks.map(task => (
-                            <div key={task.id} className="p-4 bg-white shadow-md rounded-lg border border-gray-200">
+                            <div key={task.id} className="p-4 bg-red-100 shadow-md rounded-lg border border-red-200">
                                 {/* Task Details */}
                                 <div>
                                     <h2 className="text-xl font-bold mb-2">{task.title}</h2>
@@ -73,9 +73,9 @@ const ListTasks = () => {
                                             onChange={() => handleToggle(task.id)}
                                             className="sr-only"
                                         />
-                                        <div className={`w-14 h-8 rounded-full bg-gray-300`}>
+                                        <div className={`w-14 h-8 rounded-full bg-gray-200`}>
                                             <span
-                                                className={`block w-8 h-8 rounded-full bg-black transition-transform duration-300 ease-in-out
+                                                className={`block w-8 h-8 rounded-full bg-red-300 transition-transform duration-300 ease-in-out
                     ${task.completed ? 'translate-x-6' : 'translate-x-0'}`}
                                             ></span>
                                         </div>

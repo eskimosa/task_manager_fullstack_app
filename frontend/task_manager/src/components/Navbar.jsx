@@ -3,9 +3,9 @@ import { NavLink } from 'react-router-dom';
 
 const Navbar = () => {
     const linkClass = ({ isActive }) =>
-        isActive ? 'bg-black text-white hover:bg-gray-900 hover:text-white rounded-md px-3 py-2' : 'text-white hover:bg-gray-900 hover:text-white rounded-md px-3 py-2';
+        isActive ? 'bg-red-400 text-black hover:bg-red-300 hover:text-black rounded-md px-3 py-2' : 'text-black hover:bg-red-300 hover:text-white rounded-md px-3 py-2';
     return (
-        <nav className="bg-indigo-700 border-b border-indigo-500">
+        <nav className="bg-red-100 border-b border-red-200">
             <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
                 <div className="flex h-20 items-center justify-between">
                     <div
