@@ -70,7 +70,7 @@ const ListTasks = () => {
                                         <input
                                             type="checkbox"
                                             checked={task.completed}
-                                            onChange={() => handleToggle(task.id)} // Function to handle the toggle
+                                            onChange={() => handleToggle(task.id)}
                                             className="sr-only"
                                         />
                                         <div className={`w-14 h-8 rounded-full bg-gray-300`}>
