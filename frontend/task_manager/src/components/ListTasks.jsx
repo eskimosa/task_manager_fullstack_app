@@ -19,18 +19,51 @@ const ListTasks = () => {
                 console.error('Error fetching tasks:', error);
             }
         }; fetchData();
-     },[]);
+    }, []);
 
-     return (
-        <>
-            <h1>Tasks</h1>
-            <ul>
-                {tasks.map(task => (
-                    <li key={task.id}>{task.description}</li>
-                ) )}
-            </ul>
-        </>
-     );
+    return (
+        <section className="bg-blue-50 px-4 py-10">
+            <div className="container m-auto">
+                <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
+                    {tasks.length > 0 ? (
+                        tasks.map(task => (
+                            <div key={task.id} className="p-4 bg-white shadow-md rounded-lg border border-gray-200">
+                                {/* Task Details */}
+                                <div>
+                                    <h2 className="text-xl font-bold mb-2">{task.title}</h2>
+                                    <p className="text-gray-700 mb-2">{task.description}</p>
+                                </div>
+
+                                {/* Tags aligned to the right below the description */}
+                                {task.tag && task.tag.length > 0 ? (
+                                    <div className="text-right mt-2">
+                                        {task.tag.map((tag, idx) => (
+                                            <span
+                                                key={idx}
+                                                className="bg-gray-200 px-2 py-1 rounded-full text-sm ml-2"
+                                                style={{ backgroundColor: tag.color }}
+                                            >
+                                                {tag.name}
+                                            </span>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <p className="text-gray-500 text-right mt-2">No tags</p>
+                                )}
+
+                                {/* Render completion status */}
+                                <p className={`font-semibold ${task.completed ? 'text-green-500' : 'text-red-500'}`}>
+                                    {task.completed ? 'Completed' : 'Incomplete'}
+                                </p>
+                            </div>
+                        ))
+                    ) : (
+                        <p className="text-center text-gray-500 col-span-3">No tasks available.</p>
+                    )}
+                </div>
+            </div>
+        </section>
+    );
 
 };
 
