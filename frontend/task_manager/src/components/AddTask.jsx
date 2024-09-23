@@ -105,22 +105,17 @@ const AddTask = ({ addTaskSubmit }) => {
                   value={tag.name}
                   onChange={(e) => handleTagChange(index, 'name', e.target.value)}
                 />
-                <select
-                  className='border rounded-l py-2 px-3 mx-2 w-1/4'
-                  value={tag.color}
-                  onChange={(e) => handleTagChange(index, 'color', e.target.value)}
-                >
-                  <option value=''>Select a color</option>
+                <div className="flex space-x-2">
                   {colorOptions.map((color) => (
-                    <option
+                    <div
                       key={color.value}
-                      value={color.value}
+                      className={`w-6 h-6 rounded-full cursor-pointer border ${tag.color === color.value ? 'ring-2 ring-offset-2 ring-' + color.value : ''
+                        }`}
                       style={{ backgroundColor: color.value }}
-                    >
-                      {color.name}
-                    </option>
+                      onClick={() => handleTagChange(index, 'color', color.value)}
+                    ></div>
                   ))}
-                </select>
+                </div>
                 <span
                   className='text-blue-600 text-lg font-bold cursor-pointer mx-2'
                   onClick={addTagField}
