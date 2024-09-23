@@ -21,6 +21,14 @@ const ListTasks = () => {
         }; fetchData();
     }, []);
 
+    const handleToggle = (id) => {
+        const updatedTasks = tasks.map(task =>
+            task.id === id ? { ...task, completed: !task.completed } : task
+        );
+        setTasks(updatedTasks);
+    };
+
+
     return (
         <section className="bg-blue-50 px-4 py-10">
             <div className="container m-auto">
@@ -34,7 +42,7 @@ const ListTasks = () => {
                                     <p className="text-gray-700 mb-2">{task.description}</p>
                                 </div>
 
-                                {/* Tags aligned to the right below the description */}
+                                {/* Tags */}
                                 {task.tag && task.tag.length > 0 ? (
                                     <div className="text-right mt-2">
                                         {task.tag.map((tag, idx) => (
@@ -51,10 +59,32 @@ const ListTasks = () => {
                                     <p className="text-gray-500 text-right mt-2">No tags</p>
                                 )}
 
-                                {/* Render completion status */}
-                                <p className={`font-semibold ${task.completed ? 'text-green-500' : 'text-red-500'}`}>
-                                    {task.completed ? 'Completed' : 'Incomplete'}
-                                </p>
+                                <div className="text-right px-2 py-1 mt-2">
+                                    {/* Text Labels */}
+                                    <span className={`text-sm font-semibold`}>
+                                        No
+                                    </span>
+
+                                    {/* Toggle Slider */}
+                                    <label className="relative inline-flex items-center mx-4">
+                                        <input
+                                            type="checkbox"
+                                            checked={task.completed}
+                                            onChange={() => handleToggle(task.id)} // Function to handle the toggle
+                                            className="sr-only"
+                                        />
+                                        <div className={`w-14 h-8 rounded-full bg-gray-300`}>
+                                            <span
+                                                className={`block w-8 h-8 rounded-full bg-black transition-transform duration-300 ease-in-out
+                    ${task.completed ? 'translate-x-6' : 'translate-x-0'}`}
+                                            ></span>
+                                        </div>
+                                    </label>
+
+                                    <span className={`text-sm font-semibold`}>
+                                        Yes
+                                    </span>
+                                </div>
                             </div>
                         ))
                     ) : (
