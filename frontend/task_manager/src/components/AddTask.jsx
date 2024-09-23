@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 const AddTask = ({ addTaskSubmit }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [tags, setTags] = useState([{ name: '', color: '' }]);
+  const [tags, setTags] = useState([{ name: '', color: '#FFFFFF' }]);
   const [completed, setCompleted] = useState(false);
 
   const navigate = useNavigate();
@@ -19,7 +19,7 @@ const AddTask = ({ addTaskSubmit }) => {
   ];
 
   const addTagField = () => {
-    setTags([...tags, { name: '', color: '' }]);
+    setTags([...tags, { name: '', color: '#FFFFFF' }]);
   };
 
   const removeTagField = (index) => {
@@ -40,7 +40,10 @@ const AddTask = ({ addTaskSubmit }) => {
     const newTask = {
       title,
       description,
-      tag: tags,
+      tag: tags.map(tag => ({
+        name: tag.name,
+        color: tag.color || '#FFFFFF',
+      })),
       completed: completed ? true : false,
     };
 
