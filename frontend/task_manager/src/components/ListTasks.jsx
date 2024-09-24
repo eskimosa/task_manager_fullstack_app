@@ -21,11 +21,20 @@ const ListTasks = () => {
         }; fetchData();
     }, []);
 
-    const handleToggle = (id) => {
-        const updatedTasks = tasks.map(task =>
-            task.id === id ? { ...task, completed: !task.completed } : task
-        );
-        setTasks(updatedTasks);
+    const handleToggle = async (id, isCompleted) => {
+        try {
+            const updatedTasks = tasks.map(task =>
+                task.id === id ? { ...task, completed: !task.completed } : task
+            );
+            setTasks(updatedTasks);
+
+            if (!isCompleted) {
+                await axios.delete(`http://127.0.0.1:8000/delete_task/${id}`);
+                setTasks(prevTasks => prevTasks.filter(task => task.id !== id));
+            }
+        } catch (error) {
+            console.error('Error toggling or deleting the task:', error);
+        }
     };
 
 
@@ -70,7 +79,7 @@ const ListTasks = () => {
                                         <input
                                             type="checkbox"
                                             checked={task.completed}
-                                            onChange={() => handleToggle(task.id)}
+                                            onChange={() => handleToggle(task.id, task.completed)}
                                             className="sr-only"
                                         />
                                         <div className={`w-14 h-8 rounded-full bg-gray-200`}>
