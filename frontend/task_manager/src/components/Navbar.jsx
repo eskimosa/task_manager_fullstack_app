@@ -1,7 +1,30 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Navbar = () => {
+    const username = localStorage.getItem('username');
+    const navigate = useNavigate();
+
+
+    const handleLogout = async () => {
+        try {
+            const response = await axios.post('http://127.0.0.1:8000/auth/logout/', {
+                refresh: localStorage.getItem('refresh_token')
+            });
+            
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('refresh_token');
+            localStorage.removeItem('username');
+    
+            navigate('/');
+            console.log(response.data);
+        } catch (error) {
+            console.error(error.response ? error.response.data : error.message);
+        }
+    };
+
     const linkClass = ({ isActive }) =>
         isActive ? 'bg-red-400 text-black hover:bg-red-300 hover:text-black rounded-md px-3 py-2' : 'text-black hover:bg-red-300 hover:text-white rounded-md px-3 py-2';
     return (
@@ -19,6 +42,14 @@ const Navbar = () => {
                                     className={linkClass}>Tasks</NavLink>
                                 <NavLink to="/add-task"
                                     className={linkClass}>Add Task</NavLink>
+                                {username && (
+                                    <button
+                                        onClick={handleLogout}
+                                        className="text-black hover:bg-red-300 hover:text-white rounded-md px-3 py-2"
+                                    >
+                                        Logout
+                                    </button>
+                                )}
                             </div>
                         </div>
                     </div>

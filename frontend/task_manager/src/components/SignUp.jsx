@@ -18,13 +18,13 @@ const SignUp = () => {
             return;
         }
         try {
-            const response = await axios.post('http://localhost:8000/auth/signup', {
+            const response = await axios.post('http://127.0.0.1:8000/auth/signup/', {
                 username: username,
                 password: password,
                 password2: password2,
                 email: email,
             });
-            await axios.post('http://localhost:8000/auth/login', {
+            await axios.post('http://127.0.0.1:8000/auth/login/', {
                 username: username,
                 password: password,
         });

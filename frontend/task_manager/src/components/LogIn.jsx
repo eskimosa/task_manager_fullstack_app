@@ -15,13 +15,14 @@ const LogIn = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:8000/auth/login', {
+            const response = await axios.post('http://127.0.0.1:8000/auth/login/', {
                 username: username,
                 password: password,
             });
             localStorage.setItem("access_token", response.data.access);
             localStorage.setItem("refresh_token", response.data.refresh);
             localStorage.setItem("username", username);
+            console.log('You have successfully logged in!');
             navigate("/tasks");
         } catch (error) {
             console.error(error.response.data);
