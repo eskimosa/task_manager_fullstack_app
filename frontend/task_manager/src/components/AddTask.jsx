@@ -83,7 +83,7 @@ const AddTask = ({ addTaskSubmit }) => {
                 Description
               </label>
               <input
-                type='text'
+                type='textarea'
                 id='description'
                 name='description'
                 className='border rounded w-full py-2 px-3 mb-2'

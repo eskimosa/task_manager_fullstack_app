@@ -67,8 +67,10 @@ const ListTasks = () => {
                                 ) : (
                                     <p className="text-gray-500 text-right mt-2">No tags</p>
                                 )}
+                                
 
                                 <div className="text-right px-2 py-1 mt-2">
+                                <div className="text-md font-bold mt-2 mb-1">Completed?</div>
                                     {/* Text Labels */}
                                     <span className={`text-sm font-semibold`}>
                                         No
@@ -76,6 +78,7 @@ const ListTasks = () => {
 
                                     {/* Toggle Slider */}
                                     <label className="relative inline-flex items-center mx-4">
+        
                                         <input
                                             type="checkbox"
                                             checked={task.completed}
@@ -95,6 +98,7 @@ const ListTasks = () => {
                                     </span>
                                 </div>
                             </div>
+                            
                         ))
                     ) : (
                         <p className="text-center text-gray-500 col-span-3">No tasks available.</p>
