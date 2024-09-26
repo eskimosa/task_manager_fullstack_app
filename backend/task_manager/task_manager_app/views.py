@@ -33,6 +33,14 @@ class TaskViewSet(viewsets.ViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def delete(self, request, pk=None):
+        try:
+            task = Task.objects.get(pk=pk)
+        except Task.DoesNotExist:
+            return Response({'detail': 'Task not found'}, status=status.HTTP_404_NOT_FOUND)
+        task.delete()
+        return Response({'detail': 'Task deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+
 
 class TagAutoFillView(viewsets.ViewSet):
     def list(self, request):

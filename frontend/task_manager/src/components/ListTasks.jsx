@@ -29,7 +29,7 @@ const ListTasks = () => {
             setTasks(updatedTasks);
 
             if (!isCompleted) {
-                await axios.delete(`http://127.0.0.1:8000/delete_task/${id}`);
+                await axios.delete(`http://127.0.0.1:8000/delete_task/${id}/`);
                 setTasks(prevTasks => prevTasks.filter(task => task.id !== id));
             }
         } catch (error) {
