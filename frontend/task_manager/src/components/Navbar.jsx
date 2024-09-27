@@ -5,6 +5,8 @@ import axios from 'axios';
 
 const Navbar = () => {
     const username = localStorage.getItem('username');
+    const token = localStorage.getItem('access_token');
+
     const navigate = useNavigate();
 
 
@@ -13,11 +15,11 @@ const Navbar = () => {
             const response = await axios.post('http://127.0.0.1:8000/auth/logout/', {
                 refresh: localStorage.getItem('refresh_token')
             });
-            
+
             localStorage.removeItem('access_token');
             localStorage.removeItem('refresh_token');
             localStorage.removeItem('username');
-    
+
             navigate('/');
             console.log(response.data);
         } catch (error) {
@@ -27,6 +29,7 @@ const Navbar = () => {
 
     const linkClass = ({ isActive }) =>
         isActive ? 'bg-red-400 text-black hover:bg-red-300 hover:text-black rounded-md px-3 py-2' : 'text-black hover:bg-red-300 hover:text-white rounded-md px-3 py-2';
+
     return (
         <nav className="bg-red-100 border-b border-red-200">
             <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -38,17 +41,19 @@ const Navbar = () => {
                             <div className="flex space-x-2">
                                 <NavLink to="/"
                                     className={linkClass}>Home</NavLink>
-                                <NavLink to="/tasks"
-                                    className={linkClass}>Tasks</NavLink>
-                                <NavLink to="/add-task"
-                                    className={linkClass}>Add Task</NavLink>
-                                {username && (
-                                    <button
-                                        onClick={handleLogout}
-                                        className="text-black hover:bg-red-300 hover:text-white rounded-md px-3 py-2"
-                                    >
-                                        Logout
-                                    </button>
+                                {token && (
+                                    <>
+                                        <NavLink to="/tasks"
+                                            className={linkClass}>Tasks</NavLink>
+                                        <NavLink to="/add-task"
+                                            className={linkClass}>Add Task</NavLink>
+                                        <button
+                                            onClick={handleLogout}
+                                            className="text-black hover:bg-red-300 hover:text-white rounded-md px-3 py-2"
+                                        >
+                                            Logout
+                                        </button>
+                                    </>
                                 )}
                             </div>
                         </div>
