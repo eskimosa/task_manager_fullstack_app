@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import SignUp from './SignUp';
 import LogIn from './LogIn';
+import { useNavigate } from 'react-router-dom';
 
 const Hero = () => {
     return (
@@ -19,7 +20,7 @@ const Hero = () => {
                     </p>
                 </div>
             </div>
-            <div className="flex justify-center items-start mt-0"> {/* Removed the extra margin */}
+            <div className="flex justify-center items-start mt-0">
                 <div className="w-1/3 mr-5">
                     <LogIn />
                 </div>
