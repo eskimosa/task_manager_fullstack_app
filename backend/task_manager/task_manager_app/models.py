@@ -22,12 +22,12 @@ class Tag(models.Model):
 
 
 class Task(models.Model):
-    # user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=250)
     description = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     tag = models.ManyToManyField(Tag, blank=False)
     completed = models.BooleanField(default=False)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title

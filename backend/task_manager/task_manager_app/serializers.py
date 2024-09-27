@@ -35,8 +35,9 @@ class TaskSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Task
-        fields = ['id', 'title', 'description', 'created_at', 'tag', 'completed']
+        fields = ['id', 'title', 'description', 'created_at', 'tag', 'completed', 'owner']
         ordering = ['completed']
+        read_only_fields = ['owner']
 
     def create(self, validated_data):
         tags_data = validated_data.pop('tag')  # extracts the tags data from validated_data and removes it from the

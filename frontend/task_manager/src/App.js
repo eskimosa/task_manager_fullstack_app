@@ -11,8 +11,14 @@ import axios from "axios";
 const App = () => {
 
   const addTask = async (newTask) => {
+    const token = localStorage.getItem('access_token');
+
         try {
-          await axios.post('http://localhost:8000/add_task/', newTask);
+          await axios.post('http://localhost:8000/add_task/', newTask, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
         } catch (error) {
           console.log('Error occured:', error);
         }

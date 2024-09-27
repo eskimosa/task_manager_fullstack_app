@@ -5,11 +5,17 @@ import axios from 'axios';
 const ListTasks = () => {
     const [tasks, setTasks] = useState([]);
 
+    const token = localStorage.getItem('access_token');
+
     useEffect(() => {
         const fetchData = async () => {
             try {
                 console.log('fetching task list');
-                const response = await axios.get('http://127.0.0.1:8000/list_tasks/');
+                const response = await axios.get('http://127.0.0.1:8000/list_tasks/', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+            });
                 if (response.status === 200) {
                     console.log('success!!!');
                     console.log(response.data);
@@ -29,7 +35,11 @@ const ListTasks = () => {
             setTasks(updatedTasks);
 
             if (!isCompleted) {
-                await axios.delete(`http://127.0.0.1:8000/delete_task/${id}/`);
+                await axios.delete(`http://127.0.0.1:8000/delete_task/${id}/`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+            });
                 setTasks(prevTasks => prevTasks.filter(task => task.id !== id));
             }
         } catch (error) {
@@ -40,6 +50,7 @@ const ListTasks = () => {
 
     return (
         <section className="bg-red-50 px-4 py-10">
+            <div className="text-right"></div>
             <div className="container m-auto">
                 <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
                     {tasks.length > 0 ? (
