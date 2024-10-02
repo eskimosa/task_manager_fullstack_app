@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const SignUp = () => {
+const SignUp = ({ closeModal }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [password2, setPassword2] = useState('');
@@ -17,6 +17,7 @@ const SignUp = () => {
             alert('Passwords do not match');
             return;
         }
+        console.log('Submitting sign-up form with data:', { username, email, password, password2 });
         try {
             const response = await axios.post('http://127.0.0.1:8000/auth/signup/', {
                 username: username,
@@ -43,8 +44,9 @@ const SignUp = () => {
     };
 
 
+
     return (
-        <div className="bg-red-200 p-6 rounded-lg shadow-md">
+        <div>
             <h2 className="text-2xl font-bold mb-6">Sign Up</h2>
             <form onSubmit={handleSubmit} className="flex flex-col gap-6">
                 <input

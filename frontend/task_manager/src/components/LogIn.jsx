@@ -5,7 +5,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { SvgIcon } from "@mui/material";
 
-const LogIn = () => {
+const LogIn = ({ openSignUpModal }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -19,10 +19,11 @@ const LogIn = () => {
                 username: username,
                 password: password,
             });
+            
             localStorage.setItem("access_token", response.data.access);
             localStorage.setItem("refresh_token", response.data.refresh);
             localStorage.setItem("username", username);
-            console.log('You have successfully logged in!');
+
             navigate("/tasks");
         } catch (error) {
             console.error(error.response.data);
@@ -34,7 +35,7 @@ const LogIn = () => {
     }
 
     return (
-        <div className="bg-red-200 p-6 rounded-lg shadow-md">
+        <div className="bg-red-200 p-10 rounded-lg shadow-md max-w-full w-full">
             <h2 className="text-2xl font-bold mb-6">Log In</h2>
             <form onSubmit={handleSubmit} className="flex flex-col gap-6">
                 <input
@@ -65,7 +66,17 @@ const LogIn = () => {
                     Log In
                 </button>
             </form>
+            <div className="mt-6 text-center flex justify-center items-center space-x-2">
+                <p>Don't have an account?</p>
+                <a
+                    onClick={openSignUpModal}
+                    className="text-pink-950 font-bold hover:underline cursor-pointer"
+                >
+                    Sign Up
+                </a>
+            </div>
         </div>
     );
 };
+
 export default LogIn;
