@@ -48,6 +48,8 @@ class TaskViewSet(viewsets.ViewSet):
 class TagAutoFillView(viewsets.ViewSet):
     def list(self, request):
         query = request.query_params.get('q', '')
-        tags = Tag.objects.filter(name__icontains=query)
-        serializer = TagSerializer(tags, many=True)
-        return Response(serializer.data)
+        if query:
+            tags = Tag.objects.filter(name__icontains=query)
+            serializer = TagSerializer(tags, many=True)
+            return Response(serializer.data)
+        return Response([])
