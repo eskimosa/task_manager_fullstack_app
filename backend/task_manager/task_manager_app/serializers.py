@@ -36,7 +36,7 @@ class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
         fields = ['id', 'title', 'description', 'created_at', 'tag', 'completed', 'owner']
-        ordering = ['completed']
+        ordering = ['created_at']
         read_only_fields = ['owner']
 
     def create(self, validated_data):

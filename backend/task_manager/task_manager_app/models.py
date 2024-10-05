@@ -17,6 +17,11 @@ class Tag(models.Model):
     name = models.CharField(max_length=250)
     color = models.CharField(max_length=7, default='#FFFFFF')
 
+    def save(self, *args, **kwargs):
+        # Capitalize the first letter of the tag name before saving
+        self.name = self.name.capitalize()
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return self.name
 

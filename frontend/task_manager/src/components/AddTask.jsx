@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import Autosuggest from 'react-autosuggest';
 
 const AddTask = ({ addTaskSubmit }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [tags, setTags] = useState([{ name: '', color: '#FFFFFF' }]);
   const [completed, setCompleted] = useState(false);
-
+  const [suggestions, setSuggestions] = useState([]);
+  
   const navigate = useNavigate();
 
   const colorOptions = [
@@ -18,22 +21,57 @@ const AddTask = ({ addTaskSubmit }) => {
     { name: 'White', value: '#FFFFFF' },
   ];
 
+  // Add new tag field
   const addTagField = () => {
     setTags([...tags, { name: '', color: '#FFFFFF' }]);
   };
 
+  // Remove tag field
   const removeTagField = (index) => {
     if (tags.length > 1) {
       const newTags = tags.filter((_, i) => i !== index);
       setTags(newTags);
     }
   };
+
+  // Fetch tag suggestions from the backend
+  const fetchSuggestions = async (value) => {
+    try {
+      const response = await axios.get(`http://localhost:8000/tags_autofill/?q=${value}`);
+      setSuggestions(response.data);
+    } catch (error) {
+      console.error('Error fetching suggestions:', error);
+    }
+  };
+
+  const onSuggestionsFetchRequested = ({ value }) => {
+    fetchSuggestions(value);
+  };
+
+  const onSuggestionsClearRequested = () => {
+    setSuggestions([]);
+  };
+
+  const getSuggestionValue = (suggestion) => suggestion.name;
+
+  const renderSuggestion = (suggestion) => (
+    <div>
+      {suggestion.name}
+    </div>
+  );
+
+  // Handle tag change
   const handleTagChange = (index, field, value) => {
     const newTags = [...tags];
     newTags[index][field] = value;
     setTags(newTags);
   };
 
+  const capitalizeFirstLetter = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  };
+
+  // Handle form submission
   const submitForm = async (e) => {
     e.preventDefault();
 
@@ -41,7 +79,7 @@ const AddTask = ({ addTaskSubmit }) => {
       title,
       description,
       tag: tags.map(tag => ({
-        name: tag.name,
+        name: capitalizeFirstLetter(tag.name),
         color: tag.color || '#FFFFFF',
       })),
       completed: completed ? true : false,
@@ -59,10 +97,10 @@ const AddTask = ({ addTaskSubmit }) => {
         <div className='bg-white px-6 py-8 mb-4 shadow-md rounded-md border m-4 md:m-0'>
           <form onSubmit={submitForm}>
             <h2 className='text-3xl text-center font-semibold mb-6'>Add Task</h2>
+            
+            {/* Title Field */}
             <div className='mb-4'>
-              <label
-                htmlFor='title'
-                className='block text-gray-700 font-bold mb-2'>
+              <label htmlFor='title' className='block text-gray-700 font-bold mb-2'>
                 Title
               </label>
               <input
@@ -76,10 +114,10 @@ const AddTask = ({ addTaskSubmit }) => {
                 onChange={(e) => setTitle(e.target.value)}
               />
             </div>
+            
+            {/* Description Field */}
             <div className='mb-4'>
-              <label
-                htmlFor='description'
-                className='block text-gray-700 font-bold mb-2'>
+              <label htmlFor='description' className='block text-gray-700 font-bold mb-2'>
                 Description
               </label>
               <input
@@ -93,50 +131,61 @@ const AddTask = ({ addTaskSubmit }) => {
                 onChange={(e) => setDescription(e.target.value)}
               />
             </div>
-            <label
-              htmlFor='tag'
-              className='block text-gray-700 font-bold mb-2'>
+            
+            {/* Tags Field */}
+            <label htmlFor='tag' className='block text-gray-700 font-bold mb-2'>
               Tag
             </label>
-            {/* Tag Fields */}
             {tags.map((tag, index) => (
-              <div key={index} className='flex items-center mb-4 w-full'>
-                <input
-                  type='text'
-                  className='border rounded-l py-2 px-3 w-1/4'
-                  placeholder='Tag name'
-                  value={tag.name}
-                  onChange={(e) => handleTagChange(index, 'name', e.target.value)}
-                />
-                <div className="flex space-x-2">
+              <div key={index} className='relative flex items-center mb-4 w-full'>
+                
+                {/* Autocomplete Input for Tag Name */}
+                <div className="w-full relative mb-2">
+                  <Autosuggest
+                    suggestions={suggestions}
+                    onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+                    onSuggestionsClearRequested={onSuggestionsClearRequested}
+                    getSuggestionValue={getSuggestionValue}
+                    renderSuggestion={renderSuggestion}
+                    inputProps={{
+                      placeholder: 'Tag name',
+                      value: tag.name,
+                      onChange: (e, { newValue }) => handleTagChange(index, 'name', newValue),
+                      className: 'border rounded w-full py-2 px-3',  // Add styling here to match title/description
+                    }}
+                    theme={{
+                      container: 'relative w-full',  // Ensure container takes full width
+                      suggestionsContainer: 'absolute z-10 bg-white border rounded shadow-lg',  // Dropdown appears in absolute positioning
+                      suggestion: 'p-2 cursor-pointer hover:bg-gray-100',
+                    }}
+                  />
+                </div>
+
+                {/* Color picker */}
+                <div className="flex space-x-2 ml-4">
                   {colorOptions.map((color) => (
                     <div
                       key={color.value}
-                      className={`w-6 h-6 rounded-full cursor-pointer border ${tag.color === color.value ? 'ring-2 ring-offset-2 ring-' + color.value : ''
-                        }`}
+                      className={`w-6 h-6 rounded-full cursor-pointer border ${tag.color === color.value ? 'ring-2 ring-offset-2 ring-' + color.value : ''}`}
                       style={{ backgroundColor: color.value }}
                       onClick={() => handleTagChange(index, 'color', color.value)}
                     ></div>
                   ))}
                 </div>
-                <span
-                  className='text-blue-600 text-lg font-bold cursor-pointer mx-2'
-                  onClick={addTagField}
-                >
+                
+                {/* Add and Remove Buttons */}
+                <span className='text-blue-600 text-lg font-bold cursor-pointer mx-2' onClick={addTagField}>
                   +
                 </span>
-                <span
-                  className='text-red-600 text-lg font-bold cursor-pointer mx-2'
-                  onClick={() => removeTagField(index)}
-                >
+                <span className='text-red-600 text-lg font-bold cursor-pointer mx-2' onClick={() => removeTagField(index)}>
                   -
                 </span>
               </div>
             ))}
+            
+            {/* Completed Field */}
             <div className='mb-4'>
-              <label
-                htmlFor='completed'
-                className='block text-gray-700 font-bold mb-2'>
+              <label htmlFor='completed' className='block text-gray-700 font-bold mb-2'>
                 Completed
               </label>
               <select
@@ -151,6 +200,8 @@ const AddTask = ({ addTaskSubmit }) => {
                 <option value='No'>No</option>
               </select>
             </div>
+            
+            {/* Submit Button */}
             <div>
               <button
                 className='bg-red-400 text-black hover:bg-red-300 hover:text-white font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline'
@@ -167,4 +218,3 @@ const AddTask = ({ addTaskSubmit }) => {
 };
 
 export default AddTask;
-
