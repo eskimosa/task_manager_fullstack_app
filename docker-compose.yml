@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: compose/development/django/Dockerfile
+    command: python3 manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./backend/task_manager:/app
+      - ./backend/task_manager/db.sqlite3:/app/db.sqlite3
+    env_file:
+      - .env_api
+    ports:
+      - "8000:8000"
+
+
+  frontend:
+    build:
+      context: .
+      dockerfile: compose/development/frontend/Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend/task_manager:/app
+      - /app/node_modules
